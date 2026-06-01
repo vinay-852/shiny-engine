@@ -2,7 +2,7 @@ import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import { useEffect, useState } from 'react';
-import { StockPilotFormActions } from './ui/StockPilotFormActions.jsx';
+import { FormActions } from './ui/FormActions.jsx';
 
 const emptyProduct = {
   name: '',
@@ -11,7 +11,7 @@ const emptyProduct = {
   quantity_in_stock: '',
 };
 
-export function StockPilotProductForm({ editingProduct, onCancelEdit, onSubmit }) {
+export function ProductForm({ editingProduct, onCancelEdit, onSubmit }) {
   const [form, setForm] = useState(emptyProduct);
 
   useEffect(() => {
@@ -51,7 +51,7 @@ export function StockPilotProductForm({ editingProduct, onCancelEdit, onSubmit }
         onChange={(event) => update('quantity_in_stock', event.target.value)}
         required
       />
-      <StockPilotFormActions>
+      <FormActions>
         <Button variant="contained" type="submit">
           {editingProduct ? 'Update Product' : 'Add Product'}
         </Button>
@@ -60,7 +60,7 @@ export function StockPilotProductForm({ editingProduct, onCancelEdit, onSubmit }
             Cancel
           </Button>
         )}
-      </StockPilotFormActions>
+      </FormActions>
     </Stack>
   );
 }

@@ -3,13 +3,13 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { useState } from 'react';
 import { api } from '../api/client.js';
-import { StockPilotOrderForm } from './StockPilotOrderForm.jsx';
-import { StockPilotActions } from './ui/StockPilotActions.jsx';
-import { StockPilotDataTable } from './ui/StockPilotDataTable.jsx';
-import { StockPilotPage } from './ui/StockPilotPage.jsx';
-import { StockPilotSection } from './ui/StockPilotSection.jsx';
+import { OrderForm } from './OrderForm.jsx';
+import { Actions } from './ui/Actions.jsx';
+import { DataTable } from './ui/DataTable.jsx';
+import { Page } from './ui/Page.jsx';
+import { Section } from './ui/Section.jsx';
 
-export function StockPilotOrdersView({ orders, customers, products, runAction }) {
+export function OrdersView({ orders, customers, products, runAction }) {
   const [selectedOrder, setSelectedOrder] = useState(null);
 
   const selectOrder = async (id) => {
@@ -25,7 +25,7 @@ export function StockPilotOrdersView({ orders, customers, products, runAction })
       key: 'actions',
       header: 'Actions',
       render: (order) => (
-        <StockPilotActions>
+        <Actions>
           <Button size="small" onClick={() => selectOrder(order.id)}>
             View
           </Button>
@@ -36,7 +36,7 @@ export function StockPilotOrdersView({ orders, customers, products, runAction })
           >
             Delete
           </Button>
-        </StockPilotActions>
+        </Actions>
       ),
     },
   ];
@@ -49,21 +49,21 @@ export function StockPilotOrdersView({ orders, customers, products, runAction })
   ];
 
   return (
-    <StockPilotPage title="Orders" description="Create orders and view order details.">
-      <StockPilotSection title="Create Order">
-        <StockPilotOrderForm
+    <Page title="Orders" description="Create orders and view order details.">
+      <Section title="Create Order">
+        <OrderForm
           customers={customers}
           products={products}
           onSubmit={(payload) => runAction(() => api.createOrder(payload), 'Order created and stock updated.')}
         />
-      </StockPilotSection>
+      </Section>
 
-      <StockPilotSection title="Order List" padded={false}>
-        <StockPilotDataTable columns={orderColumns} rows={orders} getRowKey={(order) => order.id} />
-      </StockPilotSection>
+      <Section title="Order List" padded={false}>
+        <DataTable columns={orderColumns} rows={orders} getRowKey={(order) => order.id} />
+      </Section>
 
       {selectedOrder && (
-        <StockPilotSection>
+        <Section>
           <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} alignItems={{ xs: 'stretch', sm: 'center' }} sx={{ mb: 2 }}>
             <Typography variant="h6" sx={{ flexGrow: 1 }}>
               Order #{selectedOrder.id}
@@ -72,9 +72,9 @@ export function StockPilotOrdersView({ orders, customers, products, runAction })
           </Stack>
           <Typography gutterBottom>Customer: {selectedOrder.customer.full_name}</Typography>
           <Typography gutterBottom>Total: ${Number(selectedOrder.total_amount).toFixed(2)}</Typography>
-          <StockPilotDataTable columns={detailColumns} rows={selectedOrder.items} getRowKey={(item) => item.id} />
-        </StockPilotSection>
+          <DataTable columns={detailColumns} rows={selectedOrder.items} getRowKey={(item) => item.id} />
+        </Section>
       )}
-    </StockPilotPage>
+    </Page>
   );
 }

@@ -4,9 +4,9 @@ import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { useMemo, useState } from 'react';
-import { StockPilotFormActions } from './ui/StockPilotFormActions.jsx';
+import { FormActions } from './ui/FormActions.jsx';
 
-export function StockPilotOrderForm({ customers, products, onSubmit }) {
+export function OrderForm({ customers, products, onSubmit }) {
   const [customerId, setCustomerId] = useState('');
   const [items, setItems] = useState([{ product_id: '', quantity: 1 }]);
 
@@ -81,7 +81,7 @@ export function StockPilotOrderForm({ customers, products, onSubmit }) {
         </Stack>
       ))}
 
-      <StockPilotFormActions>
+      <FormActions>
         <Button type="button" onClick={() => setItems((current) => [...current, { product_id: '', quantity: 1 }])}>
           Add Item
         </Button>
@@ -89,7 +89,7 @@ export function StockPilotOrderForm({ customers, products, onSubmit }) {
         <Button variant="contained" type="submit">
           Create Order
         </Button>
-      </StockPilotFormActions>
+      </FormActions>
     </Stack>
   );
 }

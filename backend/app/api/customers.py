@@ -2,7 +2,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session, joinedload
 from fastapi import APIRouter, Depends, HTTPException, status
 
-from app.db.session import get_stockpilot_db
+from app.db.session import get_db
 from app.models.customer import Customer
 from app.models.order import Order, OrderItem
 from app.schemas.customer import CustomerCreate, CustomerRead
@@ -12,7 +12,7 @@ router = APIRouter(prefix="/customers", tags=["customers"])
 
 
 @router.post("", response_model=CustomerRead, status_code=status.HTTP_201_CREATED)
-def stockpilot_create_customer(payload: CustomerCreate, db: Session = Depends(get_stockpilot_db)):
+def create_customer(payload: CustomerCreate, db: Session = Depends(get_db)):
     customer = Customer(**payload.model_dump())
     db.add(customer)
     try:
@@ -25,12 +25,12 @@ def stockpilot_create_customer(payload: CustomerCreate, db: Session = Depends(ge
 
 
 @router.get("", response_model=list[CustomerRead])
-def stockpilot_list_customers(db: Session = Depends(get_stockpilot_db)):
+def list_customers(db: Session = Depends(get_db)):
     return db.query(Customer).order_by(Customer.id.desc()).all()
 
 
 @router.get("/{customer_id}", response_model=CustomerRead)
-def stockpilot_get_customer(customer_id: int, db: Session = Depends(get_stockpilot_db)):
+def get_customer(customer_id: int, db: Session = Depends(get_db)):
     customer = db.get(Customer, customer_id)
     if not customer:
         raise HTTPException(status_code=404, detail="Customer not found.")
@@ -38,7 +38,7 @@ def stockpilot_get_customer(customer_id: int, db: Session = Depends(get_stockpil
 
 
 @router.delete("/{customer_id}", status_code=status.HTTP_204_NO_CONTENT)
-def stockpilot_delete_customer(customer_id: int, db: Session = Depends(get_stockpilot_db)):
+def delete_customer(customer_id: int, db: Session = Depends(get_db)):
     customer = (
         db.query(Customer)
         .options(joinedload(Customer.orders).joinedload(Order.items).joinedload(OrderItem.product))

@@ -2,7 +2,7 @@ import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import { useState } from 'react';
-import { StockPilotFormActions } from './ui/StockPilotFormActions.jsx';
+import { FormActions } from './ui/FormActions.jsx';
 
 const emptyCustomer = {
   full_name: '',
@@ -10,7 +10,7 @@ const emptyCustomer = {
   phone: '',
 };
 
-export function StockPilotCustomerForm({ onSubmit }) {
+export function CustomerForm({ onSubmit }) {
   const [form, setForm] = useState(emptyCustomer);
   const update = (field, value) => setForm((current) => ({ ...current, [field]: value }));
 
@@ -35,11 +35,11 @@ export function StockPilotCustomerForm({ onSubmit }) {
         required
       />
       <TextField label="Phone number" value={form.phone} onChange={(event) => update('phone', event.target.value)} required />
-      <StockPilotFormActions>
+      <FormActions>
         <Button variant="contained" type="submit">
           Add Customer
         </Button>
-      </StockPilotFormActions>
+      </FormActions>
     </Stack>
   );
 }

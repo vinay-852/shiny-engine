@@ -2,12 +2,12 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.api import customers, orders, products
-from app.core.config import get_stockpilot_settings
+from app.core.config import get_settings
 from app.db.session import Base, engine
 from app import models
 
 
-settings = get_stockpilot_settings()
+settings = get_settings()
 
 Base.metadata.create_all(bind=engine)
 
@@ -27,5 +27,5 @@ app.include_router(orders.router)
 
 
 @app.get("/health", tags=["health"])
-def stockpilot_health_check():
+def health_check():
     return {"status": "ok"}

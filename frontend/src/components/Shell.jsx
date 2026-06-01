@@ -16,7 +16,7 @@ const tabs = [
   { id: 'orders', label: 'Orders' },
 ];
 
-export function StockPilotShell({ activeTab, onTabChange, children }) {
+export function Shell({ activeTab, onTabChange, children }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const handleTabChange = (tabId) => {

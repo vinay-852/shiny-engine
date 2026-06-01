@@ -3,7 +3,7 @@ from decimal import Decimal
 from sqlalchemy.orm import Session, joinedload
 from fastapi import APIRouter, Depends, HTTPException, status
 
-from app.db.session import get_stockpilot_db
+from app.db.session import get_db
 from app.models.customer import Customer
 from app.models.order import Order, OrderItem
 from app.models.product import Product
@@ -13,7 +13,7 @@ from app.schemas.order import OrderCreate, OrderRead
 router = APIRouter(prefix="/orders", tags=["orders"])
 
 
-def _stockpilot_order_details(query):
+def _order_details(query):
     return query.options(
         joinedload(Order.customer),
         joinedload(Order.items).joinedload(OrderItem.product),
@@ -21,7 +21,7 @@ def _stockpilot_order_details(query):
 
 
 @router.post("", response_model=OrderRead, status_code=status.HTTP_201_CREATED)
-def stockpilot_create_order(payload: OrderCreate, db: Session = Depends(get_stockpilot_db)):
+def create_order(payload: OrderCreate, db: Session = Depends(get_db)):
     customer = db.get(Customer, payload.customer_id)
     if not customer:
         raise HTTPException(status_code=404, detail="Customer not found.")
@@ -70,25 +70,25 @@ def stockpilot_create_order(payload: OrderCreate, db: Session = Depends(get_stoc
 
     order.total_amount = total
     db.commit()
-    return _stockpilot_order_details(db.query(Order)).filter(Order.id == order.id).one()
+    return _order_details(db.query(Order)).filter(Order.id == order.id).one()
 
 
 @router.get("", response_model=list[OrderRead])
-def stockpilot_list_orders(db: Session = Depends(get_stockpilot_db)):
-    return _stockpilot_order_details(db.query(Order)).order_by(Order.id.desc()).all()
+def list_orders(db: Session = Depends(get_db)):
+    return _order_details(db.query(Order)).order_by(Order.id.desc()).all()
 
 
 @router.get("/{order_id}", response_model=OrderRead)
-def stockpilot_get_order(order_id: int, db: Session = Depends(get_stockpilot_db)):
-    order = _stockpilot_order_details(db.query(Order)).filter(Order.id == order_id).first()
+def get_order(order_id: int, db: Session = Depends(get_db)):
+    order = _order_details(db.query(Order)).filter(Order.id == order_id).first()
     if not order:
         raise HTTPException(status_code=404, detail="Order not found.")
     return order
 
 
 @router.delete("/{order_id}", status_code=status.HTTP_204_NO_CONTENT)
-def stockpilot_delete_order(order_id: int, db: Session = Depends(get_stockpilot_db)):
-    order = _stockpilot_order_details(db.query(Order)).filter(Order.id == order_id).first()
+def delete_order(order_id: int, db: Session = Depends(get_db)):
+    order = _order_details(db.query(Order)).filter(Order.id == order_id).first()
     if not order:
         raise HTTPException(status_code=404, detail="Order not found.")
 

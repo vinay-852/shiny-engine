@@ -7,7 +7,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Typography from '@mui/material/Typography';
 
-export function StockPilotDataTable({ columns, rows, getRowKey, emptyText = 'No records found.' }) {
+export function DataTable({ columns, rows, getRowKey, emptyText = 'No records found.' }) {
   return (
     <TableContainer sx={{ overflowX: 'auto' }}>
       <Table size="small" sx={{ minWidth: { xs: 640, md: 720 } }}>

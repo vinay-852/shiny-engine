@@ -1,6 +1,6 @@
 import Stack from '@mui/material/Stack';
 
-export function StockPilotActions({ children }) {
+export function Actions({ children }) {
   return (
     <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1} alignItems={{ xs: 'stretch', sm: 'center' }}>
       {children}

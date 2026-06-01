@@ -1,13 +1,13 @@
 import Button from '@mui/material/Button';
 import { useState } from 'react';
 import { api } from '../api/client.js';
-import { StockPilotProductForm } from './StockPilotProductForm.jsx';
-import { StockPilotActions } from './ui/StockPilotActions.jsx';
-import { StockPilotDataTable } from './ui/StockPilotDataTable.jsx';
-import { StockPilotPage } from './ui/StockPilotPage.jsx';
-import { StockPilotSection } from './ui/StockPilotSection.jsx';
+import { ProductForm } from './ProductForm.jsx';
+import { Actions } from './ui/Actions.jsx';
+import { DataTable } from './ui/DataTable.jsx';
+import { Page } from './ui/Page.jsx';
+import { Section } from './ui/Section.jsx';
 
-export function StockPilotProductsView({ products, runAction }) {
+export function ProductsView({ products, runAction }) {
   const [editingProduct, setEditingProduct] = useState(null);
 
   const saveProduct = (payload) => {
@@ -27,31 +27,31 @@ export function StockPilotProductsView({ products, runAction }) {
       key: 'actions',
       header: 'Actions',
       render: (product) => (
-        <StockPilotActions>
+        <Actions>
           <Button size="small" onClick={() => setEditingProduct(product)}>
             Edit
           </Button>
           <Button size="small" color="error" onClick={() => runAction(() => api.deleteProduct(product.id), 'Product deleted.')}>
             Delete
           </Button>
-        </StockPilotActions>
+        </Actions>
       ),
     },
   ];
 
   return (
-    <StockPilotPage title="Products" description="Create, update, and delete product inventory records.">
-      <StockPilotSection title={editingProduct ? 'Edit Product' : 'Add Product'}>
-        <StockPilotProductForm
+    <Page title="Products" description="Create, update, and delete product inventory records.">
+      <Section title={editingProduct ? 'Edit Product' : 'Add Product'}>
+        <ProductForm
           editingProduct={editingProduct}
           onCancelEdit={() => setEditingProduct(null)}
           onSubmit={saveProduct}
         />
-      </StockPilotSection>
+      </Section>
 
-      <StockPilotSection title="Product List" padded={false}>
-        <StockPilotDataTable columns={columns} rows={products} getRowKey={(product) => product.id} />
-      </StockPilotSection>
-    </StockPilotPage>
+      <Section title="Product List" padded={false}>
+        <DataTable columns={columns} rows={products} getRowKey={(product) => product.id} />
+      </Section>
+    </Page>
   );
 }

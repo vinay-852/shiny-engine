@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { api } from '../api/client.js';
 
-export function useStockPilotInventoryData() {
+export function useInventoryData() {
   const [products, setProducts] = useState([]);
   const [customers, setCustomers] = useState([]);
   const [orders, setOrders] = useState([]);

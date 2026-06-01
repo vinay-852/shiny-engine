@@ -2,7 +2,7 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 from fastapi import APIRouter, Depends, HTTPException, status
 
-from app.db.session import get_stockpilot_db
+from app.db.session import get_db
 from app.models.product import Product
 from app.schemas.product import ProductCreate, ProductRead, ProductUpdate
 
@@ -11,7 +11,7 @@ router = APIRouter(prefix="/products", tags=["products"])
 
 
 @router.post("", response_model=ProductRead, status_code=status.HTTP_201_CREATED)
-def stockpilot_create_product(payload: ProductCreate, db: Session = Depends(get_stockpilot_db)):
+def create_product(payload: ProductCreate, db: Session = Depends(get_db)):
     product = Product(**payload.model_dump())
     db.add(product)
     try:
@@ -24,12 +24,12 @@ def stockpilot_create_product(payload: ProductCreate, db: Session = Depends(get_
 
 
 @router.get("", response_model=list[ProductRead])
-def stockpilot_list_products(db: Session = Depends(get_stockpilot_db)):
+def list_products(db: Session = Depends(get_db)):
     return db.query(Product).order_by(Product.id.desc()).all()
 
 
 @router.get("/{product_id}", response_model=ProductRead)
-def stockpilot_get_product(product_id: int, db: Session = Depends(get_stockpilot_db)):
+def get_product(product_id: int, db: Session = Depends(get_db)):
     product = db.get(Product, product_id)
     if not product:
         raise HTTPException(status_code=404, detail="Product not found.")
@@ -37,7 +37,7 @@ def stockpilot_get_product(product_id: int, db: Session = Depends(get_stockpilot
 
 
 @router.put("/{product_id}", response_model=ProductRead)
-def stockpilot_update_product(product_id: int, payload: ProductUpdate, db: Session = Depends(get_stockpilot_db)):
+def update_product(product_id: int, payload: ProductUpdate, db: Session = Depends(get_db)):
     product = db.get(Product, product_id)
     if not product:
         raise HTTPException(status_code=404, detail="Product not found.")
@@ -55,7 +55,7 @@ def stockpilot_update_product(product_id: int, payload: ProductUpdate, db: Sessi
 
 
 @router.delete("/{product_id}", status_code=status.HTTP_204_NO_CONTENT)
-def stockpilot_delete_product(product_id: int, db: Session = Depends(get_stockpilot_db)):
+def delete_product(product_id: int, db: Session = Depends(get_db)):
     product = db.get(Product, product_id)
     if not product:
         raise HTTPException(status_code=404, detail="Product not found.")

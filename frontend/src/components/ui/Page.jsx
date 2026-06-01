@@ -2,7 +2,7 @@ import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
-export function StockPilotPage({ title, description, children }) {
+export function Page({ title, description, children }) {
   return (
     <Stack spacing={3}>
       <Box>

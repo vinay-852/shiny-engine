@@ -16,5 +16,5 @@ class Settings:
 
 
 @lru_cache
-def get_stockpilot_settings() -> Settings:
+def get_settings() -> Settings:
     return Settings()
